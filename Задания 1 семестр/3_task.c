@@ -14,6 +14,7 @@ void input_mas(int*mas, int N){
         int x;
         scanf("%d",&x);
         mas[i] = x;
+        
     }
 }
 

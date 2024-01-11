@@ -17,8 +17,6 @@ void input_mas(int*mas, int N){
         
     }
 }
-
-
 void last_zero(int*mas, int N){
     int l = 0, r = 0;
     int need_digit = 0;

@@ -12,9 +12,9 @@ class Matrix
 public:   
     //case 1
     void Generate(){
-        A = new double *[size];
-        x = new double[size];
-        b = new double[size];
+        A = new double *[size]{};
+        x = new double[size]{};
+        b = new double[size]{};
 
         for (int i = 0; i < size; i++)
         {
@@ -156,6 +156,7 @@ public:
             }
             if(std::abs(sum - b[i]) > mx) mx = std::abs(sum - b[i]);
         }
+        std::cout.precision(14);
         std::cout << mx;
         std::cout << "\n------------------------------------------------\n";
     }

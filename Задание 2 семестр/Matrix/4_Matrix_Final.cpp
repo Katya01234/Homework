@@ -7,8 +7,7 @@ class Matrix
     double** A;
     double* x;
     double* b;
-    int size;
-    int point_of_step = 0;
+    int size = 0;
 public:   
     Matrix(){
         info();
@@ -59,14 +58,16 @@ public:
         }
     }
     void del(){
-        delete[] x;
-        delete[] b;
+        if(size != 0){
+            delete[] x;
+            delete[] b;
 
-        for (int i = 0; i < size; i++)
-        {
-            delete[] A[i];
+            for (int i = 0; i < size; i++)
+            {
+                delete[] A[i];
+            }
+            delete[] A;
         }
-        delete[] A;
     }
     //case 2
     void output_A_b(){
@@ -77,10 +78,17 @@ public:
             }
             std::cout << "\n";
         }
+
+        std::cout << "\nx\n";
+        for(int j = 0;j < size;j++){
+                std::cout << x[j] << " ";
+            }    
+
         std::cout << "\nb\n";
         for(int j = 0;j < size;j++){
                 std::cout << b[j] << " ";
             }
+       
         std::cout << "\n------------------------------------------------\n";
     }
     
@@ -164,28 +172,47 @@ public:
     }
     //case 6
     void save_matrix(){
-        std::ofstream outp("matrix.txt",std::ios::app);
-        outp << point_of_step << "\nA\n";
-        point_of_step++;
+        std::ofstream outp("matrix.txt");
+        outp << size << "\n";
         for(int i = 0;i < size;i++){
             for(int j = 0;j < size;j++){
                 outp << A[i][j] << " ";
             }
             outp << "\n";
         }
-        outp << "x\n";
         for(int j = 0;j < size;j++){
                 outp << x[j] << " ";
             }
-        outp << "\nb\n";
+        outp << "\n";
         for(int j = 0;j < size;j++){
                 outp << b[j] << " ";
             }
-        outp << "\n------------------------------------------------\n";
-
+        std::cout << "\n------------------------------------------------\n";
         outp.close();
     }
     //case 7
+    void open_matrix(){
+        std::ifstream  inp("matrix.txt");
+        del();
+        if(inp >> size){
+            Generate();
+            for(int i = 0;i < size;i++){
+                for(int j = 0;j < size;j++){
+                    inp >> A[i][j];
+                }
+            }
+            for(int j = 0;j < size;j++){
+                    inp >> x[j];
+                }
+            for(int j = 0;j < size;j++){
+                    inp >> b[j];
+                }
+            std::cout << size <<"\n------------------------------------------------\n";
+        }
+        else std::cout << "File empty!";
+        inp.close();
+    }
+    //case 8
     void info(){
         std::cout << "Info" << "\n"
         << "1.Create:" << "\n"
@@ -194,8 +221,9 @@ public:
         << "4.Gauss_zero:" <<"\n"
         << "5.Check:" <<"\n"
         << "6.Save:" <<"\n"
-        << "7.Info" <<"\n"
-        << "8.Exit:" <<"\n";
+        << "7.Open" <<"\n"
+        << "8.Info" <<"\n"
+        << "9.Exit:" <<"\n";
     }
 
     
@@ -214,24 +242,17 @@ public:
 
 
 int main(){
-    int flag = 1,flag_delete = 0;
+    int flag = 1;
     int num_;
     Matrix m;
-    //Clear file
-    std::ofstream clr("matrix.txt");
-    clr.close();
-    //Clear file
     while(flag){
         std::cin >> num_;
         switch(num_)
         {
         case 1:
-            if (flag_delete){
-                m.del();
-            }
+            m.del();
             m.get_N();
             m.Generate();
-            flag_delete = 1;
             break;
 
         case 2:
@@ -249,14 +270,20 @@ int main(){
         case 5:
             m.Matr_umn();
             break;
+
         case 6:
             m.save_matrix();
             break;
+        
         case 7:
-            m.info();
+            m.open_matrix();
             break;
 
         case 8:
+            m.info();
+            break;
+
+        case 9:
             flag = 0;
             break;
         }

@@ -8,7 +8,7 @@
 */
 /*
 #include<stdio.h>
-
+.
 void input_mas(int*mas, int N){
     for(int i = 0;i < N;i++){
         int x;
